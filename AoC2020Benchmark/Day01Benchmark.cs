@@ -1,11 +1,9 @@
 ﻿using AoC2020.Days.Day01;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnostics.Windows.Configs;
 
 namespace AoC2020Benchmark
 {
     [MemoryDiagnoser]
-    [NativeMemoryProfiler]
     public class Day01Benchmark : BaseDayBenchmark
     {
         private readonly Day01 _problem = new Day01();
