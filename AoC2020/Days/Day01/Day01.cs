@@ -7,7 +7,7 @@ namespace AoC2020.Days.Day01
     {
         public Day01()
         {
-            SetInput(FileParser.ReadFromFile(nameof(Day01)));
+            SetInput(FileParser.ReadFromFile(nameof(Day01)).Select(int.Parse).ToArray());
         }
 
         public override string SolvePartOne()
