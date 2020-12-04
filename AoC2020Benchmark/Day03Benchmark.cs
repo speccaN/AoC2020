@@ -10,9 +10,7 @@ namespace AoC2020Benchmark
         [Benchmark]
         public override string Part1() => _problem.SolvePartOne();
 
-        public override string Part2()
-        {
-            throw new System.NotImplementedException();
-        }
+        [Benchmark]
+        public override string Part2() => _problem.SolvePartTwo();
     }
 }

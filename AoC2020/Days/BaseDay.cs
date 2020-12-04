@@ -1,9 +1,13 @@
-﻿namespace AoC2020.Days
+﻿using AoC2020.Helpers;
+
+namespace AoC2020.Days
 {
-    public abstract class BaseDay<T>
+    public abstract class BaseDay
     {
-        public virtual T Input { get; private set; }
-        protected void SetInput(T val) => Input = val;
+
+        private string[] _input;
+
+        public string[] Input => _input ?? FileParser.ReadFromFile(GetType().Name);
 
         public abstract string SolvePartOne();
         public abstract string SolvePartTwo();

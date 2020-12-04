@@ -1,42 +1,28 @@
-﻿using AoC2020.Helpers;
+﻿using System.Linq;
 
 namespace AoC2020.Days.Day03
 {
-    public class Day03 : BaseDay<string[]>
+    public class Day03 : BaseDay
     {
-        public Day03()
-        {
-            SetInput(FileParser.ReadFromFile(nameof(Day03)));
-        }
+        public override string SolvePartOne() => CalcTrees(1, 3).ToString();
 
-        public override string SolvePartOne()
+        public override string SolvePartTwo() =>
+            new (int x, int y)[] {(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)}.Select(s => CalcTrees(s.y, s.x))
+                .Aggregate(1L, (a, b) => a * b).ToString();
+
+        int CalcTrees(int moveY, int moveX)
         {
-            var x = 3;
-            var y = 1;
-            var current = (x, y);
-            var rightBound = Input[0].Length;
+            var currentX = 0;
             var trees = 0;
 
-            while (y + current.y <= Input.Length)
+            for (int y = 0; y < Input.Length; y += moveY)
             {
-                if (current.x >= rightBound)
-                    current.x -= rightBound;
-
-                if (Input[current.y][current.x] == '#')
-                {
+                if (Input[y][currentX % Input[y].Length] == '#')
                     trees++;
-                }
-
-                current.y++;
-                current.x+=3;
+                currentX += moveX;
             }
 
-            return trees.ToString();
-        }
-
-        public override string SolvePartTwo()
-        {
-            throw new System.NotImplementedException();
+            return trees;
         }
     }
 }
