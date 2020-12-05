@@ -4,6 +4,7 @@ namespace AoC2020.Days
 {
     public abstract class BaseDay
     {
+        protected void SetInput(string[] inp) => _input = inp;
 
         private string[] _input;
 
