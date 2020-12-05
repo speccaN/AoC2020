@@ -4,6 +4,7 @@ namespace AoC2020Benchmark
 {
     [MarkdownExporterAttribute.GitHub]
     [HtmlExporter]
+    [MemoryDiagnoser]
     [KeepBenchmarkFiles(false)]
     public abstract class BaseDayBenchmark
     {

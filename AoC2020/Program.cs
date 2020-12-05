@@ -9,6 +9,7 @@ namespace AoC2020
         {
             Day04 d4 = new Day04();
             Console.WriteLine(d4.SolvePartOne());
+            Console.WriteLine(d4.SolvePartTwo());
         }
     }
 }
