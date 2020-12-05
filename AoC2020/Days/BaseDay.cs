@@ -10,6 +10,8 @@ namespace AoC2020.Days
 
         public string[] Input => _input ?? FileParser.ReadFromFile(GetType().Name);
 
+        protected void InitInput() => _input = FileParser.ReadFromFile(GetType().Name);
+
         public abstract string SolvePartOne();
         public abstract string SolvePartTwo();
     }
