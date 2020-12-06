@@ -1,5 +1,4 @@
 ﻿using AoC2020.Days.Day05;
-using BenchmarkDotNet.Attributes;
 
 namespace AoC2020Benchmark
 {
@@ -7,10 +6,8 @@ namespace AoC2020Benchmark
     {
         private readonly Day05 _problem = new Day05();
 
-        [Benchmark]
         public override string Part1() => _problem.SolvePartOne();
 
-        [Benchmark]
         public override string Part2() => _problem.SolvePartTwo();
     }
 }

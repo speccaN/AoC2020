@@ -1,10 +1,10 @@
-﻿using AoC2020.Days.Day04;
+﻿using AoC2020.Days.Day06;
 
 namespace AoC2020Benchmark
 {
-    public class Day04Benchmark : BaseDayBenchmark
+    public class Day06Benchmark : BaseDayBenchmark
     {
-        private readonly Day04 _problem = new Day04();
+        private readonly Day06 _problem = new Day06();
 
         public override string Part1() => _problem.SolvePartOne();
 
