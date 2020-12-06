@@ -25,17 +25,11 @@ namespace AoC2020.Days.Day06
 
         public override string SolvePartTwo()
         {
-            var a = Input
-                .Select(line =>
-                    line.Split(Environment.NewLine)
-                        .Aggregate((first, second) => new string(first.Intersect(second).ToArray())))
-                .Aggregate(0, (i, s) => i + s.Length).ToString();
-
             return Input
                 .Select(line =>
-                    line.Split(Environment.NewLine).Select(x => x)
-                        .Aggregate((first, second) => string.Join("", first.Intersect(second))))
-                .Aggregate(0, (i, s) => i += s.Length).ToString();
+                    line.Split(Environment.NewLine)
+                        .Aggregate((first, second) => string.Join("", first.Intersect(second)))).Sum(s => s.Length).ToString();
+                //.Aggregate(0, (i, s) => i += s.Length).ToString();
         }
     }
 }

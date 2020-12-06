@@ -8,8 +8,10 @@ namespace AoC2020Benchmark
     {
         private readonly Day02 _problem = new Day02();
 
+        [Benchmark]
         public override string Part1() => _problem.SolvePartOne();
 
+        [Benchmark]
         public override string Part2() => _problem.SolvePartTwo();
     }
 }
