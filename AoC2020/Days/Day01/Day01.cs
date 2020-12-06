@@ -25,9 +25,9 @@ namespace AoC2020.Days.Day01
         public override string SolvePartTwo()
         {
             var result = 0;
-            for (int i = 0; i < Input.Length; i++)
-                for (int j = i + 1; j < Input.Length; j++)
-                    for (int k = j + 1; k < Input.Length; k++)
+            for (int i = 0; i < _input.Length; i++)
+                for (int j = i + 1; j < _input.Length; j++)
+                    for (int k = j + 1; k < _input.Length; k++)
                         if (_input[i] + _input[j] + _input[k] == 2020)
                             result = _input[i] * _input[j] * _input[k];
 
