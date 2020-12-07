@@ -3,9 +3,11 @@
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19041.630 (2004/?/20H1)
 Intel Core i7-8700K CPU 3.70GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical cores
 .NET Core SDK=5.0.100
-  [Host]     : .NET Core 5.0.0 (CoreCLR 5.0.20.51904, CoreFX 5.0.20.51904), X64 RyuJIT
-  DefaultJob : .NET Core 5.0.0 (CoreCLR 5.0.20.51904, CoreFX 5.0.20.51904), X64 RyuJIT
+  [Host]                 : .NET Core 5.0.0 (CoreCLR 5.0.20.51904, CoreFX 5.0.20.51904), X64 RyuJIT
+  ShortRun-.NET Core 5.0 : .NET Core 5.0.0 (CoreCLR 5.0.20.51904, CoreFX 5.0.20.51904), X64 RyuJIT
 
+Job=ShortRun-.NET Core 5.0  Runtime=.NET Core 5.0  IterationCount=3  
+LaunchCount=1  WarmupCount=3  
 
 ```
 
@@ -47,3 +49,9 @@ Intel Core i7-8700K CPU 3.70GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical 
 |------- |---------:|--------:|--------:|---------:|------:|------:|-----------:|
 |  Part1 | 303.2 μs | 0.42 μs | 0.39 μs |  67.8711 |     - |     - |  418.32 KB |
 |  Part2 | 675.3 μs | 1.28 μs | 1.20 μs | 168.9453 |     - |     - | 1038.78 KB |
+
+### Day 7
+| Method |       Mean |     Error |   StdDev |    Gen 0 |   Gen 1 | Gen 2 | Allocated |
+|------- |-----------:|----------:|---------:|---------:|--------:|------:|----------:|
+|  Part1 | 7,778.8 μs | 453.98 μs | 24.88 μs | 148.4375 | 70.3125 |     - | 956.35 KB |
+|  Part2 |   728.0 μs |  16.86 μs |  0.92 μs | 141.6016 | 62.5000 |     - | 867.97 KB |
