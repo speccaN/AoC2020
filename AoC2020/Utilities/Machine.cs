@@ -19,7 +19,7 @@ namespace AoC2020.Utilities
             _originalInput = input;
         }
 
-        private static State ExecuteOperation(State state, Instruction instruction) =>
+        private static State ExecuteInstruction(State state, Instruction instruction) =>
             instruction switch
             {
                 { Operation: "acc" } => state with { IndexPointer = state.IndexPointer + 1, Accumulator = state.Accumulator + instruction.Value },
@@ -41,7 +41,7 @@ namespace AoC2020.Utilities
                     return false;
 
                 visitedIndices.Add(state.IndexPointer);
-                state = ExecuteOperation(state, program[state.IndexPointer]);
+                state = ExecuteInstruction(state, program[state.IndexPointer]);
             }
 
             accumulator = state.Accumulator;
