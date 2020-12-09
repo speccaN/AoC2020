@@ -8,6 +8,7 @@ namespace AoC2020Benchmark
     [MemoryDiagnoser]
     [KeepBenchmarkFiles(false)]
     [ShortRunJob(RuntimeMoniker.NetCoreApp50)]
+    [MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public abstract class BaseDayBenchmark
     {
         public abstract string Part1();
