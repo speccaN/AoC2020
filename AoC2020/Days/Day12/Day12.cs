@@ -61,7 +61,7 @@ namespace AoC2020.Days.Day12
             private double RotateBoat(double currentAngle, int val, double angle) => currentAngle + val * angle;
 
             private Waypoint RotateWaypoint(Waypoint waypoint, double angle) => waypoint with
-            { X = (Math.Cos(angle) * waypoint.X - Math.Sin(angle) * waypoint.Y), Y = (Math.Sin(angle) * waypoint.X + Math.Cos(angle) * waypoint.Y) };
+            { X = Math.Cos(angle) * waypoint.X - Math.Sin(angle) * waypoint.Y, Y = (Math.Sin(angle) * waypoint.X + Math.Cos(angle) * waypoint.Y) };
 
             private double Manhattan(double a, double b) => Math.Abs((int)Math.Round(a, 0)) + Math.Abs((int)Math.Round(b, 0));
 
