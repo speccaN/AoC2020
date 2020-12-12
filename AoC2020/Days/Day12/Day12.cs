@@ -8,15 +8,21 @@ namespace AoC2020.Days.Day12
 {
     public class Day12 : BaseDay
     {
-        internal record State(int Facing, (double x, double y) Coordinates, Waypoint Waypoint);
+        private Instruction[] _input;
+        internal record State(double Facing, (double x, double y) Coordinates, Waypoint Waypoint);
         internal record Waypoint(double X, double Y);
         internal record Instruction(string Operation, int Value);
 
         internal class Boat
         {
+            private readonly Dictionary<string, double> _degreesToRads = new()
+            {
+                {"L", Math.PI / -180},
+                {"R", Math.PI / 180}
+            };
             private readonly string[] _input;
             private readonly bool _partTwo;
-            private State State { get; set; } = new(90, (0, 0), new Waypoint(10, -1));
+            private State State { get; set; } = new(0, (0, 0), new Waypoint(10, -1));
             
             public Boat(string[] input, bool partTwo = false)
             {
@@ -26,68 +32,30 @@ namespace AoC2020.Days.Day12
 
             State ExecuteInstruction(State state, Instruction instruction) => instruction switch
             {
-                { Operation: "N" } when _partTwo => 
-                    state with { Coordinates = state.Coordinates, 
-                        Waypoint = new Waypoint(state.Waypoint.X, state.Waypoint.Y-instruction.Value) },
-                { Operation: "S" } when _partTwo =>
-                    state with
-                        {
-                        Coordinates = state.Coordinates,
-                        Waypoint = new Waypoint(state.Waypoint.X, state.Waypoint.Y + instruction.Value)
-                        },
-                { Operation: "E" } when _partTwo => 
-                    state with { 
-                        Coordinates = state.Coordinates,
-                        Waypoint = new Waypoint(state.Waypoint.X + instruction.Value, state.Waypoint.Y)
-                        },
-                { Operation: "W" } when _partTwo => 
-                    state with {
-                        Coordinates = state.Coordinates,
-                        Waypoint = new Waypoint(state.Waypoint.X - instruction.Value, state.Waypoint.Y)
-                        },
-                { Operation: "L" } when _partTwo => 
-                    state with {
-                        Coordinates = state.Coordinates,
-                        Waypoint = RotateWaypoint(state.Waypoint, instruction, instruction.Value * Math.PI / -180)
-                        },
-                { Operation: "R" } when _partTwo => state with 
-                    {
-                    Coordinates = state.Coordinates,
-                    Waypoint = RotateWaypoint(state.Waypoint, instruction, instruction.Value * Math.PI / 180)
-                    },
-                { Operation: "F" } when _partTwo => state with 
-                    {
-                    Coordinates = (state.Coordinates.x + state.Waypoint.X * instruction.Value, state.Coordinates.y + state.Waypoint.Y * instruction.Value),
-                    Waypoint = state.Waypoint
-                    },
+                { Operation: "N" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y - instruction.Value } },
+                { Operation: "S" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y + instruction.Value } },
+                { Operation: "E" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X + instruction.Value, Y = state.Waypoint.Y } },
+                { Operation: "W" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X - instruction.Value, Y = state.Waypoint.Y } },
+                { Operation: "L" } when _partTwo => state with { Waypoint = RotateWaypoint(state.Waypoint, instruction.Value * _degreesToRads[instruction.Operation]) },
+                { Operation: "R" } when _partTwo => state with { Waypoint = RotateWaypoint(state.Waypoint, instruction.Value * _degreesToRads[instruction.Operation]) },
+                { Operation: "F" } when _partTwo => state with { Coordinates = (state.Coordinates.x + state.Waypoint.X * instruction.Value, state.Coordinates.y + state.Waypoint.Y * instruction.Value) },
 
 
-                { Operation: "N" } => state with { Coordinates = (state.Coordinates.x, state.Coordinates.y - instruction.Value) },
-                { Operation: "S" } => state with { Coordinates = (state.Coordinates.x, state.Coordinates.y + instruction.Value) },
-                { Operation: "E" } => state with { Coordinates = (state.Coordinates.x + instruction.Value, state.Coordinates.y) },
-                { Operation: "W" } => state with { Coordinates = (state.Coordinates.x - instruction.Value, state.Coordinates.y) },
-                { Operation: "L" } => state with { Facing = CalcAngle(state.Facing, instruction.Value*-1) },
-                { Operation: "R" } => state with { Facing = CalcAngle(state.Facing, instruction.Value) },
-                { Operation: "F" } => state with { Coordinates = MoveWithAngle(state.Facing, state.Coordinates.x, state.Coordinates.y, instruction.Value) },
+                { Operation: "N" } => state with { Coordinates = MoveInDirection(Math.PI/-2d, instruction.Value) },
+                { Operation: "S" } => state with { Coordinates = MoveInDirection(Math.PI / 2d, instruction.Value) },
+                { Operation: "E" } => state with { Coordinates = MoveInDirection(0, instruction.Value) },
+                { Operation: "W" } => state with { Coordinates = MoveInDirection(Math.PI, instruction.Value) },
+                { Operation: "F" } => state with { Coordinates = MoveInDirection(state.Facing, instruction.Value) },
+                var x when x.Operation is "L" || x.Operation is "R" => state with { Facing = RotateBoat(instruction.Value, _degreesToRads[instruction.Operation]) },
                 _ => throw new ArgumentOutOfRangeException(nameof(instruction))
             };
+            
+            private (double x, double y) MoveInDirection(double angle, double val) => 
+                (val * Math.Cos(angle) + State.Coordinates.x, val * Math.Sin(angle) + State.Coordinates.y);
 
-            private int CalcAngle(int currentAngle, int turn)
-            {
-                var newAngle = (currentAngle + turn) % 360;
-                return newAngle < 0 ? newAngle + 360 : newAngle;
-            }
+            private double RotateBoat(int val, double angle) => val * angle;
 
-            private (double x, double y) MoveWithAngle(int angle, double x, double y, double val) => angle switch
-            {
-                0 => (x, y - val),
-                90 => (x + val, y),
-                180 => (x, y + val),
-                270 => (x - val, y),
-                _ => throw new ArgumentOutOfRangeException(nameof(angle), angle, null)
-            };
-
-            private Waypoint RotateWaypoint(Waypoint waypoint, Instruction instruction, double angle) => waypoint with
+            private Waypoint RotateWaypoint(Waypoint waypoint, double angle) => waypoint with
             { X = (Math.Cos(angle) * waypoint.X - Math.Sin(angle) * waypoint.Y), Y = (Math.Sin(angle) * waypoint.X + Math.Cos(angle) * waypoint.Y) };
 
             private double Manhattan(double a, double b) => Math.Abs((int)Math.Round(a, 0)) + Math.Abs((int)Math.Round(b, 0));
@@ -101,7 +69,6 @@ namespace AoC2020.Days.Day12
 
                 return Manhattan(State.Coordinates.x, State.Coordinates.y);
             }
-            
         }
         
         public override string SolvePartOne()
