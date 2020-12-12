@@ -28,43 +28,36 @@ namespace AoC2020.Days.Day12
             {
                 { Operation: "N" } when _partTwo => 
                     state with { Coordinates = state.Coordinates, 
-                        Facing = state.Facing, 
                         Waypoint = new Waypoint(state.Waypoint.X, state.Waypoint.Y-instruction.Value) },
                 { Operation: "S" } when _partTwo =>
                     state with
                         {
                         Coordinates = state.Coordinates,
-                        Facing = state.Facing,
                         Waypoint = new Waypoint(state.Waypoint.X, state.Waypoint.Y + instruction.Value)
                         },
                 { Operation: "E" } when _partTwo => 
                     state with { 
                         Coordinates = state.Coordinates,
-                        Facing = state.Facing,
                         Waypoint = new Waypoint(state.Waypoint.X + instruction.Value, state.Waypoint.Y)
                         },
                 { Operation: "W" } when _partTwo => 
                     state with {
                         Coordinates = state.Coordinates,
-                        Facing = state.Facing,
                         Waypoint = new Waypoint(state.Waypoint.X - instruction.Value, state.Waypoint.Y)
                         },
                 { Operation: "L" } when _partTwo => 
                     state with {
                         Coordinates = state.Coordinates,
-                        Facing = state.Facing,
-                        Waypoint = RotateWaypoint(state.Waypoint, instruction)
+                        Waypoint = RotateWaypoint(state.Waypoint, instruction, instruction.Value * Math.PI / -180)
                         },
                 { Operation: "R" } when _partTwo => state with 
                     {
                     Coordinates = state.Coordinates,
-                    Facing = state.Facing,
-                    Waypoint = RotateWaypoint(state.Waypoint, instruction)
+                    Waypoint = RotateWaypoint(state.Waypoint, instruction, instruction.Value * Math.PI / 180)
                     },
                 { Operation: "F" } when _partTwo => state with 
                     {
                     Coordinates = (state.Coordinates.x + state.Waypoint.X * instruction.Value, state.Coordinates.y + state.Waypoint.Y * instruction.Value),
-                    Facing = state.Facing,
                     Waypoint = state.Waypoint
                     },
 
@@ -94,25 +87,10 @@ namespace AoC2020.Days.Day12
                 _ => throw new ArgumentOutOfRangeException(nameof(angle), angle, null)
             };
 
-            private Waypoint RotateWaypoint(Waypoint waypoint, Instruction instruction) => instruction switch
-            {
-                {Operation: "L" } => instruction.Value switch
-                {
-                    90 => waypoint with { X = waypoint.Y, Y = waypoint.X * -1 },
-                    180 => waypoint with { X = waypoint.X * -1, Y = waypoint.Y * -1 },
-                    270 => waypoint with { X = waypoint.Y, Y = waypoint.X },
-                    _ => throw new ArgumentOutOfRangeException()
-                },
-                {Operation: "R" } => instruction.Value switch
-                {
-                    90 => waypoint with { X = waypoint.Y * -1, Y = waypoint.X },
-                    180 => waypoint with { X = waypoint.Y * -1, Y = waypoint.X * -1 },
-                    270 => waypoint with { X = waypoint.Y, Y = waypoint.X },
-                    _ => throw new ArgumentOutOfRangeException()
-                }
-            };
+            private Waypoint RotateWaypoint(Waypoint waypoint, Instruction instruction, double angle) => waypoint with
+            { X = (Math.Cos(angle) * waypoint.X - Math.Sin(angle) * waypoint.Y), Y = (Math.Sin(angle) * waypoint.X + Math.Cos(angle) * waypoint.Y) };
 
-            private double Manhattan(double a, double b) => Math.Abs(a) + Math.Abs(b);
+            private double Manhattan(double a, double b) => Math.Abs((int)Math.Round(a, 0)) + Math.Abs((int)Math.Round(b, 0));
 
             public double Move()
             {
