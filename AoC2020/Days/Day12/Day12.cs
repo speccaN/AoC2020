@@ -30,24 +30,31 @@ namespace AoC2020.Days.Day12
                 _partTwo = partTwo;
             }
 
-            State ExecuteInstruction(State state, Instruction instruction) => instruction switch
+            State ExecuteInstruction(State state, Instruction instruction) => _partTwo switch
             {
-                { Operation: "N" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y - instruction.Value } },
-                { Operation: "S" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y + instruction.Value } },
-                { Operation: "E" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X + instruction.Value, Y = state.Waypoint.Y } },
-                { Operation: "W" } when _partTwo => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X - instruction.Value, Y = state.Waypoint.Y } },
-                { Operation: "F" } when _partTwo => state with { Coordinates = (state.Coordinates.x + state.Waypoint.X * instruction.Value, state.Coordinates.y + state.Waypoint.Y * instruction.Value) },
-                var x when _partTwo && (x.Operation is "L" || x.Operation is "R") => state with { Waypoint = RotateWaypoint(state.Waypoint, instruction.Value * _degreesToRads[instruction.Operation]) },
-
-                { Operation: "N" } => state with { Coordinates = MoveInDirection(Math.PI/-2d, instruction.Value) },
-                { Operation: "S" } => state with { Coordinates = MoveInDirection(Math.PI / 2d, instruction.Value) },
-                { Operation: "E" } => state with { Coordinates = MoveInDirection(0, instruction.Value) },
-                { Operation: "W" } => state with { Coordinates = MoveInDirection(Math.PI, instruction.Value) },
-                { Operation: "F" } => state with { Coordinates = MoveInDirection(state.Facing, instruction.Value) },
-                var x when x.Operation is "L" || x.Operation is "R" => state with { Facing = RotateBoat(state.Facing, instruction.Value, _degreesToRads[instruction.Operation]) },
-                _ => throw new ArgumentOutOfRangeException(nameof(instruction))
+                false => instruction switch
+                {
+                    { Operation: "N" } => state with { Coordinates = MoveInDirection(Math.PI / -2d, instruction.Value) },
+                    { Operation: "S" } => state with { Coordinates = MoveInDirection(Math.PI / 2d, instruction.Value) },
+                    { Operation: "E" } => state with { Coordinates = MoveInDirection(0, instruction.Value) },
+                    { Operation: "W" } => state with { Coordinates = MoveInDirection(Math.PI, instruction.Value) },
+                    { Operation: "F" } => state with { Coordinates = MoveInDirection(state.Facing, instruction.Value) },
+                    var x when x.Operation is "L" || x.Operation is "R" => state with { Facing = RotateBoat(state.Facing, instruction.Value, _degreesToRads[instruction.Operation]) },
+                    _ => throw new ArgumentOutOfRangeException(nameof(instruction))
+                },
+                true => instruction switch
+                {
+                    { Operation: "N" } => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y - instruction.Value } },
+                    { Operation: "S" } => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X, Y = state.Waypoint.Y + instruction.Value } },
+                    { Operation: "E" } => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X + instruction.Value, Y = state.Waypoint.Y } },
+                    { Operation: "W" } => state with { Waypoint = state.Waypoint with { X = state.Waypoint.X - instruction.Value, Y = state.Waypoint.Y } },
+                    { Operation: "F" } => state with { Coordinates = (state.Coordinates.x + state.Waypoint.X * instruction.Value, state.Coordinates.y + state.Waypoint.Y * instruction.Value) },
+                    var x when x.Operation is "L" || x.Operation is "R" => state with { Waypoint = RotateWaypoint(state.Waypoint, instruction.Value * _degreesToRads[instruction.Operation]) },
+                    _ => throw new ArgumentOutOfRangeException(nameof(instruction))
+                }
             };
-            
+
+
             private (double x, double y) MoveInDirection(double angle, double val) => 
                 (val * Math.Cos(angle) + State.Coordinates.x, val * Math.Sin(angle) + State.Coordinates.y);
 
