@@ -8,7 +8,6 @@ namespace AoC2020.Days.Day12
 {
     public class Day12 : BaseDay
     {
-        private Instruction[] _input;
         internal record State(double Facing, (double x, double y) Coordinates, Waypoint Waypoint);
         internal record Waypoint(double X, double Y);
         internal record Instruction(string Operation, int Value);
